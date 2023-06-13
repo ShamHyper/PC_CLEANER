@@ -11,8 +11,6 @@ for disk in disks:
     usage = psutil.disk_usage(disk.mountpoint)
     tfc_before += usage.free
 
-print(tfc_before) ### REMOVE ON RELEASE
-
 ### PC_INFO legacy block
 def clear():
     print('\033[37m')
@@ -95,15 +93,8 @@ if temp_need == True:
         usage = psutil.disk_usage(disk.mountpoint)
         tfc_after += usage.free
 
-    print(tfc_after)
-
-    print("")
-
     tfc = (tfc_after - tfc_before)/1024**3
     tfc_small = (tfc_after - tfc_before)/1024**2
-
-    print("tfc", tfc)
-    print("tfc_small", tfc_small)
 
     if tfc > 0.1:
         print(f"Total size of deleted files: {round(tfc, 2)} GB")

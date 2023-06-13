@@ -1,4 +1,4 @@
-# PC_CLEANER - The most underrated garbage cleaner on PC
+# PC_CLEANER - most underrated garbage cleaner on PC
 
 ## What files does this program delete?
 

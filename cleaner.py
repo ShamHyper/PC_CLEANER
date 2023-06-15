@@ -1,5 +1,6 @@
 import os
 import psutil
+from tqdm import tqdm
 
 disks = psutil.disk_partitions()
 
@@ -43,6 +44,8 @@ if temp_need == True:
                     pass
                 except FileNotFoundError:
                     pass
+                except FileExistsError:
+                    pass
             for file in files:
                 Wtemp_path = os.path.join(root, file)
                 try:
@@ -61,17 +64,25 @@ if temp_need == True:
                 try:
                     if os.path.isfile(file_path):
                         os.unlink(file_path)
+                    if os.path.isdir(file_path):
+                        os.rmdir(file_path)
                 except PermissionError:
                     pass
                 except FileNotFoundError:
                     pass
                 except FileExistsError:
+                    pass 
+                except NotADirectoryError:
                     pass
 
     def clean_temp_directory():
         temp_dir = os.getenv('temp')
         cache_dir = os.path.expanduser('~\\AppData\\Local\\Temp')
-        for dir_path in (temp_dir, cache_dir):
+        old_updates_dir = os.path.join(os.getenv('SYSTEMDRIVE'), 'Windows', 'SoftwareDistribution', 'Download')
+        hiberfil_sys_path = os.path.join('C:', os.sep, 'hiberfil.sys')
+        lkr_dir = os.path.join('C:', os.sep, 'Windows', 'LiveKernelReports')
+        rempls_dir = os.path.join('C:', os.sep, 'Program Files', 'empl')
+        for dir_path in (temp_dir, cache_dir, old_updates_dir, hiberfil_sys_path, lkr_dir, rempls_dir):
             clean_temp_files(dir_path)
 
     def clear_nvidia_cache():
@@ -81,11 +92,16 @@ if temp_need == True:
             clean_temp_files(dir_path)
 
     def ultradef():
+        pbar = tqdm(total=100)
+        import time
+        pbar.update(10)
         clean_win_temp()
+        pbar.update(40)
         clean_temp_directory()
+        pbar.update(25)
         clear_nvidia_cache()
-        clear()
-        clear()
+        pbar.update(25)
+        pbar.close()
     
     ultradef()
 
@@ -105,4 +121,4 @@ if temp_need == True:
             print("Failed to clean your already perfectly cleaned PC!")
 
     print("")
-    input("Press Enter to exit")
+    input("Press Enter to exit...")

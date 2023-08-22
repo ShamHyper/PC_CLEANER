@@ -1,6 +1,5 @@
 import os
 import psutil
-from tqdm import tqdm
 
 disks = psutil.disk_partitions()
 
@@ -34,7 +33,7 @@ clear()
 
 if temp_need == True:
     def clean_win_temp():
-        Wtemp_path = os.path.abspath("C:\\Windows\\Temp")
+        Wtemp_path = os.path.expanduser('~\\Windows\\Temp')
         for root, dirs, files in os.walk(Wtemp_path):
             for file in files:
                 file_path = os.path.join(root, file)
@@ -92,16 +91,9 @@ if temp_need == True:
             clean_temp_files(dir_path)
 
     def ultradef():
-        pbar = tqdm(total=100)
-        import time
-        pbar.update(10)
         clean_win_temp()
-        pbar.update(40)
         clean_temp_directory()
-        pbar.update(25)
         clear_nvidia_cache()
-        pbar.update(25)
-        pbar.close()
     
     ultradef()
 

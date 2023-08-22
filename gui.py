@@ -5,7 +5,6 @@ import dearpygui.dearpygui as dpg
 disks = psutil.disk_partitions()
 
 tfc_before = 0
-tfc_after = 0
 tfc = 0
 
 for disk in disks:
@@ -86,18 +85,19 @@ def ultradef():
     clean_temp_directory()
     clear_nvidia_cache()
 
-for disk in disks:
-    usage = psutil.disk_usage(disk.mountpoint)
-    tfc_after += usage.free
-
-tfc = (tfc_after - tfc_before)/1024**3
-tfc_small = (tfc_after - tfc_before)/1024**2
-
 def exit_app():
     dpg.destroy_context()
 
 def start():
     ultradef()
+    
+    tfc_after = 0
+    for disk in disks:
+        usage = psutil.disk_usage(disk.mountpoint)
+        tfc_after += usage.free
+    tfc = (tfc_after - tfc_before)/1024**3
+    tfc_small = (tfc_after - tfc_before)/1024**2
+
     if tfc > 0.1:
         text_item = f"Total size of deleted files: {round(tfc, 2)} GB"
     else:
@@ -110,7 +110,7 @@ def start():
 
 
 dpg.create_context()
-dpg.create_viewport(title='PC_CLEANER', width=516, height=200, resizable=False, vsync=True, decorated=True)
+dpg.create_viewport(title='PC_CLEANER', width=501, height=214, resizable=False, vsync=True, decorated=False)
 dpg.setup_dearpygui()
 
 with dpg.window(label="PC_CLEANER Ver.0.3 | Made by: ShamHyper | ©Daun-Dev, 2022-2023", width=500, height=213, no_move=True, no_collapse=True, no_close=True, no_resize=True):

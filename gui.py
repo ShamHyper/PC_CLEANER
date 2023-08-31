@@ -90,7 +90,11 @@ def exit_app():
 
 def start():
     ultradef()
-    
+
+    progress = dpg.add_window(label="Progress:", width=500, height=60, pos=(0,85), no_move=True, no_collapse=True, no_close=True, no_resize=True)
+    text_item2 = "Starting the cleanup..."  
+    dpg.add_text(text_item2, parent=progress) 
+
     tfc_after = 0
     for disk in disks:
         usage = psutil.disk_usage(disk.mountpoint)
@@ -113,7 +117,7 @@ dpg.create_context()
 dpg.create_viewport(title='PC_CLEANER', width=501, height=214, resizable=False, vsync=True, decorated=False)
 dpg.setup_dearpygui()
 
-with dpg.window(label="PC_CLEANER Ver.0.3 | Made by: ShamHyper | ©Daun-Dev, 2022-2023", width=500, height=213, no_move=True, no_collapse=True, no_close=True, no_resize=True):
+with dpg.window(label="PC_CLEANER Ver.0.3.2 | Made by: ShamHyper | ©Daun-Dev, 2022-2023", width=500, height=213, no_move=True, no_collapse=True, no_close=True, no_resize=True):
     dpg.add_button(label="START CLEANING", callback=start)
     dpg.add_button(label="EXIT", callback=exit_app)
 

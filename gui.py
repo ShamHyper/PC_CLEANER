@@ -11,13 +11,11 @@ for disk in disks:
     usage = psutil.disk_usage(disk.mountpoint)
     tfc_before += usage.free
 
-### PC_INFO legacy block
 def clear():
     print('\033[37m')
     os.system('cls' if os.name == 'nt' else 'clear')
 
 user_folder = os.path.expanduser('~')
-### End of PC_INFO legacy block
 
 
 clear()

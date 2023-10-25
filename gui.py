@@ -12,7 +12,6 @@ for disk in disks:
     tfc_before += usage.free
 
 def clear():
-    print('\033[37m')
     os.system('cls' if os.name == 'nt' else 'clear')
 
 user_folder = os.path.expanduser('~')

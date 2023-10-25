@@ -118,7 +118,6 @@ with dpg.window(label="PC_CLEANER Ver.0.3.2 | Made by: ShamHyper | ©Daun-Dev, 2
     dpg.add_button(label="START CLEANING", callback=start)
     dpg.add_button(label="EXIT", callback=exit_app)
 
-#Init dpg
 dpg.show_viewport()
 dpg.start_dearpygui()
 dpg.destroy_context()

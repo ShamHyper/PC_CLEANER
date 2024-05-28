@@ -39,21 +39,13 @@ if temp_need == True:
                 file_path = os.path.join(root, file)
                 try:
                     os.remove(file_path)
-                except PermissionError:
-                    pass
-                except FileNotFoundError:
-                    pass
-                except FileExistsError:
+                except (PermissionError, FileExistsError, FileNotFoundError):
                     pass
             for file in files:
                 Wtemp_path = os.path.join(root, file)
                 try:
                     os.mkdir(Wtemp_path)
-                except PermissionError:
-                    pass
-                except FileNotFoundError:
-                    pass
-                except FileExistsError:
+                except (PermissionError, FileNotFoundError, FileExistsError):
                     pass
 
     def clean_temp_files(root_dir):
@@ -65,13 +57,7 @@ if temp_need == True:
                         os.unlink(file_path)
                     if os.path.isdir(file_path):
                         os.rmdir(file_path)
-                except PermissionError:
-                    pass
-                except FileNotFoundError:
-                    pass
-                except FileExistsError:
-                    pass 
-                except NotADirectoryError:
+                except (PermissionError, FileNotFoundError, FileExistsError, NotADirectoryError):
                     pass
 
     def clean_temp_directory():

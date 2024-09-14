@@ -1,2 +1,1 @@
-pip install dearpygui
-python gui.py
+python cleaner.py

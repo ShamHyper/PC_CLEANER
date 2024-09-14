@@ -8,10 +8,10 @@
 - Now the program clears the DNS cache
 ## What files does this program delete?
 - C:\Windows\Temp
-- C:\Users\SHAMHY~1\AppData\Local\Temp
+- C:\Users\User\AppData\Local\Temp
 - C:\Windows\SoftwareDistribution\Download
 - C:\Windows\Prefetch
-- C:\Users\Имя_пользователя\AppData\Local\NVIDIA\GLCache
-- C:\Users\Имя_пользователя\AppData\Local\NVIDIA\DXCache
+- C:\Users\User\AppData\Local\NVIDIA\GLCache
+- C:\Users\User\AppData\Local\NVIDIA\DXCache
 - C:\Windows\LiveKernelReports
 - DNS Cache

@@ -65,7 +65,7 @@ BASE_FOLDERS = [
 ]
 
 def get_directory_size(directory):
-    """Вычисляет размер директории в байтах."""
+    """Calculates directory size in bytes."""
     total_size = 0
     try:
         for dirpath, _, filenames in os.walk(directory):
@@ -79,7 +79,7 @@ def get_directory_size(directory):
     return total_size
 
 def clear_folder(folder):
-    """Очищает папку и возвращает освобожденный объем, без логов удаления."""
+    """Clears a folder and returns the freed space amount, without deletion logs."""
     deleted_size = 0
     if not os.path.exists(folder):
         return 0
@@ -98,7 +98,7 @@ def clear_folder(folder):
     return deleted_size
 
 def flush_dns():
-    """Очищает кэш DNS."""
+    """Flushes DNS cache."""
     print(f"\n{Fore.CYAN}[💽] Flushing DNS cache...{Style.RESET_ALL}")
     try:
         subprocess.run(['ipconfig', '/flushdns'], check=True)
@@ -106,8 +106,36 @@ def flush_dns():
     except subprocess.CalledProcessError:
         pass
 
+def purge_pip_cache():
+    """Purges pip cache and returns freed space."""
+    pip_cache_dir = os.path.join(os.getenv('USERPROFILE'), 'AppData', 'Local', 'pip', 'Cache')
+    if not os.path.exists(pip_cache_dir):
+        return 0
+
+    if not get_user_confirmation("Pip Cache", "Python package manager cache"):
+        print(f"{Fore.CYAN}[💽] Skipping Pip Cache{Style.RESET_ALL}")
+        return 0
+
+    print(f"\n{Fore.CYAN}[💽] Purging pip cache...{Style.RESET_ALL}")
+    try:
+        size_before = get_directory_size(pip_cache_dir)
+        
+        result = subprocess.run(['pip', 'cache', 'purge'], capture_output=True, text=True)
+        
+        if result.returncode == 0:
+            size_after = get_directory_size(pip_cache_dir)
+            freed_size = size_before - size_after
+            print(f"{Fore.GREEN}[✅] Pip cache purged successfully. Freed {convert_size(freed_size)}{Style.RESET_ALL}")
+            return freed_size
+        else:
+            print(f"{Fore.RED}[❌] Failed to purge pip cache{Style.RESET_ALL}")
+            return 0
+    except Exception:
+        print(f"{Fore.RED}[❌] Error while purging pip cache{Style.RESET_ALL}")
+        return 0
+
 def convert_size(size_bytes):
-    """Конвертирует размер в читаемый формат."""
+    """Converts size to readable format."""
     if size_bytes == 0:
         return "0 B"
     units = ("B", "KB", "MB", "GB", "TB")
@@ -116,16 +144,16 @@ def convert_size(size_bytes):
     return f"{size:.2f} {units[unit_idx]}"
 
 def get_user_confirmation(name, description):
-    """Запрашивает подтверждение у пользователя."""
+    """Requests user confirmation."""
     print(f"\n{Fore.YELLOW}[❓] {name}: {description}{Style.RESET_ALL}")
     while True:
-        choice = input(f"{Fore.WHITE}Clear this folder? (y/n): {Style.RESET_ALL}").lower().strip()
+        choice = input(f"{Fore.WHITE}Clear this? (y/n): {Style.RESET_ALL}").lower().strip()
         if choice in ('y', 'n'):
             return choice == 'y'
         print(f"{Fore.RED}Please enter 'y' or 'n'{Style.RESET_ALL}")
 
 def main():
-    """Основной цикл очистки."""
+    """Main cleaning loop."""
     total_deleted_size = 0
     for name, path, desc, needs_confirm in BASE_FOLDERS:
         if not os.path.exists(path):
@@ -133,7 +161,7 @@ def main():
 
         if needs_confirm:
             if not get_user_confirmation(name, desc):
-                print(f"{Fore.CYAN}[ℹ] Skipping {name}{Style.RESET_ALL}")
+                print(f"{Fore.CYAN}[💽] Skipping {name}{Style.RESET_ALL}")
                 continue
 
         print(f"\n{Fore.CYAN}[💽] Cleaning {name} ({path})...{Style.RESET_ALL}")
@@ -142,8 +170,9 @@ def main():
         print(f"{Fore.GREEN}[✅] Freed {convert_size(size)} from {name}{Style.RESET_ALL}")
 
     flush_dns()
+    total_deleted_size += purge_pip_cache()
     
-    # Подвал интерфейса
+    # Interface footer
     print(f"\n{Fore.MAGENTA}{'═' * 50}{Style.RESET_ALL}")
     print(f"{Fore.GREEN}Total space freed: {convert_size(total_deleted_size)}{Style.RESET_ALL}")
     print(f"{Fore.MAGENTA}{'═' * 50}{Style.RESET_ALL}")

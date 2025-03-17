@@ -1,1 +1,3 @@
 python cleaner.py
+
+pause
